@@ -25,8 +25,24 @@ function queryPosts(url,queryData,sendResponse){
     });
 
 }
+function queryPost(url,queryData,sendResponse){
+    mongo.connect(url,(err,client)=>{
+        if(err){
+            console.log(err);
+        }
+        let db = client.db('posts');
+        db.collection('userpost').findOne(queryData,(err,result) =>{
+            if(err)
+                throw err;
+            console.log(result);
+            client.close();
+            sendResponse(result);    
+        });
+    });
+}
 
 module.exports ={
     addPost : saveNewPost,
-    queryPosts : queryPosts
+    queryPosts : queryPosts,
+    queryPost :queryPost
 };

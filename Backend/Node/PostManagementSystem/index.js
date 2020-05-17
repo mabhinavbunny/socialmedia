@@ -1,5 +1,5 @@
 const express = require('express');
-
+var ObjectId = require('mongodb').ObjectID;
 const app = express();
 const dbCalls = require('./databasecallbacks');
 const url = 'mongodb://localhost:27017/';
@@ -31,5 +31,16 @@ app.get('/getPosts',function(req,res){
         return res.send(result);
     });
    
-})
+});
+
+app.get('/getPost',function(req,res){
+    console.log('getting the post by id');
+    let postId = req.query.postId;
+    let data={
+        "_id": new ObjectId(postId)
+    };
+    dbCalls.queryPost(url,data,(result)=>{
+        return res.send(result);
+    })
+});
 app.listen(3000);
